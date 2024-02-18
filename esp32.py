@@ -18,10 +18,8 @@ transaction = 0
 while True:
     print("checking for command")
     response = urequests.get(url)
-    print("studpid")
     
     if response != None and response.status_code == 200:
-        print(response.json())
         response_json = response.json()
         if "commands" in response_json:
             arr_num = response_json["commands"]
@@ -31,12 +29,10 @@ while True:
             
             while not completed:
                 correct_string = ""
-                
                 total = 0
                 
                 for n in arr_num:
                     temp = 0
-                    print("child", n)
                     if type(n) is list:
                         temp = sum(n)
                         correct_string += "+".join(str(x) for x in n) + "|"
@@ -47,7 +43,6 @@ while True:
                     total += temp
 
                 correct_string = correct_string[:-1]
-                print("check:", correct_string)
                 send = correct_string + 'c' + str(total) + 't' + str(transaction) + "\n"
                 
                 print("Sever send:", send.encode("utf-8"))
@@ -61,10 +56,7 @@ while True:
                     completed = True                    
                 
                 
-                
-                
-                
-    uart1.write("\n")
+
     
     response.close()
     sleep(1)

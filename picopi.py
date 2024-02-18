@@ -37,6 +37,7 @@ while True:
         total = 0
         checksum = -1
         command = uart.readline()
+        runCommand = False
         
         print("from server:", command)
         
@@ -46,7 +47,6 @@ while True:
             
             command = command.decode("utf-8")
             
-            print("after decode:", command)
             split = command.split("c")
             
             print("1", split)
@@ -58,37 +58,31 @@ while True:
             
             metadata = split[1]
             
-            print("heelo1")
             split2 = metadata.split("t")
             
             if len(split2) != 2:
                raise IndexError
             
-            print("heelo2")
             checksum = int(split2[0]) 
             given_t = int(split2[1][:-1])
             
             if given_t >= transaction:            
-                print("hello3", command)
                 splitCommands = command.split('|')
                 for n in splitCommands:
-                    print("hello4", n)
                     simulPressed = n.split("+")
                     for s in simulPressed:
                         total += int(s)
-                
-            print("total:",total)
+                        
+                if total != checksum:
+                    raise ValueError
+                    
             
-            if total == checksum:
                 complete = True
                 transaction += 1
+                            
+            uart.write(b"Done\n")
                 
-                print("Client send: Done")
-                uart.write(b"Done\n")
-            else:
-                raise ValueError
-                
-              
+  
             
         except (ValueError, IndexError) as error:
             print("Client send: Failed")
@@ -99,15 +93,10 @@ while True:
     
 
     if splitCommands != None:
-        #command = command[:-1].decode("utf-8")
-        
-        #splitCommands = command.split("|")
-        
         for splitC in splitCommands:
             simulPressed = [int(x) for x in splitC.split("+")]
             
-            
-            # kbd.press(*simulPressed)
+            kbd.press(*simulPressed)
             time.sleep(0.5)
-            # kbd.release(*simulPressed)
+            kbd.release(*simulPressed)
     
