@@ -11,8 +11,6 @@ export const getCommands = async () => {
 };
 
 export const createCommand = async (newData) => {
-  console.log(newData)
-
   const { data } = await axios.post(
     `${URL}/command/create`,
     newData,
@@ -20,3 +18,9 @@ export const createCommand = async (newData) => {
 
   return data.success;
 };
+
+export const deleteCommand = async (command) => {
+  await axios.delete(
+    `${URL}/command?commandName=${command}`,
+  );
+}

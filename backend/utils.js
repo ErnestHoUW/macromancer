@@ -12,16 +12,37 @@ export const updateFile = (filePath, commandName, newCommand) => {
       return;
     }
 
-    // Step 2: Parse the JSON data into a JavaScript object
     const jsonData = JSON.parse(data);
 
-    // Step 3: Modify the JavaScript object (append or update data)
     jsonData[commandName] = newCommand;
 
-    // Step 4: Convert the modified JavaScript object back to JSON
     const updatedJsonData = JSON.stringify(jsonData, null, 2); // The third argument is for indentation (optional)
 
-    // Step 5: Write the updated JSON data back to the file
+    fs.writeFile(filePath, updatedJsonData, "utf8", (err) => {
+      if (err) {
+        console.error("Error writing to the file:", err);
+        return;
+      }
+
+      console.log("Data appended to the JSON file successfully.");
+    });
+  });
+};
+
+export const deleteFromFile = (filePath, commandName, newCommand) => {
+  fs.readFile(filePath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading the file:", err);
+      return;
+    }
+
+    const jsonData = JSON.parse(data);
+
+    jsonData[commandName] = undefined;
+    delete jsonData[commandName]
+
+    const updatedJsonData = JSON.stringify(jsonData, null, 2); // The third argument is for indentation (optional)
+
     fs.writeFile(filePath, updatedJsonData, "utf8", (err) => {
       if (err) {
         console.error("Error writing to the file:", err);

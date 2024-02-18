@@ -3,12 +3,12 @@
     "description": "This command shutdowns the computer",
     "keystrokes": "windows+x|u|u"
   },
-  "test": {
-    "description": "test",
-    "keystrokes": "ctrl+a+s+d|2|4"
-  },
   "ctrl alt delete": {
     "description": "ctrl alt delete",
     "keystrokes": "ctrl+alt+delete"
+  },
+  "Nick's Command": {
+    "description": "Shutdown Ernest's Computer",
+    "keystrokes": "ctrl+a+d|3"
   }
 }

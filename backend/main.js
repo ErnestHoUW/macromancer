@@ -1,6 +1,6 @@
 // Import required modules
 import express from "express";
-import { convertKeystrokes, readFile, updateFile } from "./utils.js";
+import { convertKeystrokes, deleteFromFile, readFile, updateFile } from "./utils.js";
 import cors from 'cors'
 
 // Create an Express application
@@ -57,6 +57,15 @@ app.post("/command/create", (req, res) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.send({ "success": true });
 });
+
+app.delete("/command", (req, res) => {
+  const command = req.query.commandName;
+
+  deleteFromFile("./commands.json", command)
+
+  res.header("Access-Control-Allow-Origin", "*");
+  res.send({ "success": true });
+})
 
 // Start the server and listen on the specified port
 app.listen(port, () => {

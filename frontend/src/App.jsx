@@ -1,96 +1,32 @@
-import { Button, Form, Input } from "antd";
-import { createCommand, getCommands } from "../api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import MenuList from "../components/MenuList/MenuList";
+import CommandList from "../components/CommandList/CommandList";
+import CommandForm from "../components/CommandForm/CommandForm";
+import styled from "styled-components";
 
 const App = () => {
-  const [form] = Form.useForm();
-  const [commands, setCommands] = useState([])
-  const [success, setSuccess] = useState(false)
+  const [currentTab, setCurrentTab] = useState("allCommands");
 
-  const fetchCommands = async () => {
-    const res = await getCommands();
-    setCommands(res)
-  }
- 
-  useEffect(() => {
-    fetchCommands();
-  }, [])
-
-  const onFinish = async (values) => {
-    console.log(values)
-    const success = await createCommand({
-      command: values.commandName,
-      description: values.description,
-      keystrokes: values.keystrokes,
-    })
-
-    setSuccess(success)
-    fetchCommands();
-
-    form.resetFields();
-  }
+  const handleTabChange = (key) => {
+    setCurrentTab(key);
+  };
 
   return (
-    <>
-      <Form
-        onFinish={onFinish}
-        form={form}
-      >
-        <Form.Item
-          label="Command Name"
-          name="commandName"
-          required
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Description"
-          name="description"
-          required
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Keystrokes"
-          name="keystrokes"
-          required
-        >
-          <Input  />
-          
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-      <div>Rules for inputting keystrokes:</div>
-          <ul>
-            <li>
-              For keys pressed simultaneously please connect them using "+".
-            </li>
-            <li>
-              Please use "ctrl" for the Control Key.
-            </li>
-            <li>
-              If you have a sequence of keys, seperate them using |.
-            </li>
-            <li>
-              Ex. ctrl+k+d | ctrl+s | s (everything before the | will be executed first, then the second, and so on and so forth.)
-            </li>
-          </ul>
-      {success && <div>Successfully added command!</div>}
-      <div>
-        {commands.map(([key, value]) => 
-        <ul key={key}>
-          <li style={{ fontWeight: 600 }}>{key}</li>
-          <li>{value.description}</li>
-          <li>{value.keystrokes}</li>
-        
-        </ul>)}
-      </div>
-    </>
+    <Wrapper>
+      <h1>macromancer</h1>
+      <MenuList tab={currentTab} setTab={handleTabChange} />
+      {currentTab === "allCommands" && <CommandList />}
+      {currentTab === "addCommand" && <CommandForm />}
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  width: calc(95vw - 40px);
+  height: 100vh;
+`
 
 export default App;
