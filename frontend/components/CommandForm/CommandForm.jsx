@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const data = [
   "For keys pressed simultaneously please connect them using " + "",
-  "Please use &quot;ctrl&quot; for the Control Key. Type out the full key for all other keys",
+  "Please use \"ctrl\" for the Control Key. Type out the full key for all other keys",
   "If you have a sequence of keys, seperate them using |.",
   "Ex. ctrl+k+d | ctrl+s | s (everything before the | will be executed first, then the second, and so on and so forth.)",
 ];
