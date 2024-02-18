@@ -13,15 +13,57 @@ wlan.connect('Tetris', 'abcd1234') # connect to an AP
 wlan.config('mac')      # get the interface's MAC address
 wlan.ifconfig()         # get the interface's IP/netmask/gw/DNS addresses
 
-url = "http://ed50-138-51-93-72.ngrok-free.app/command"
+url = "http://e123-138-51-93-72.ngrok-free.app/command"
+transaction = 0
 while True:
+    print("checking for command")
     response = urequests.get(url)
+    print("studpid")
     
     if response != None and response.status_code == 200:
+        print(response.json())
         response_json = response.json()
-        if "command" in response_json:
-            correct_string = response_json["command"]
-            uart1.write(correct_string)
+        if "commands" in response_json:
+            arr_num = response_json["commands"]
+            
+            completed = False
+            
+            
+            while not completed:
+                correct_string = ""
+                
+                total = 0
+                
+                for n in arr_num:
+                    temp = 0
+                    print("child", n)
+                    if type(n) is list:
+                        temp = sum(n)
+                        correct_string += "+".join(str(x) for x in n) + "|"
+                    else:
+                        correct_string += str(n) + "|"
+                        temp = n
+                    
+                    total += temp
+
+                correct_string = correct_string[:-1]
+                print("check:", correct_string)
+                send = correct_string + 'c' + str(total) + 't' + str(transaction) + "\n"
+                
+                print("Sever send:", send.encode("utf-8"))
+                uart1.write(send.encode("utf-8"))
+                
+                back = uart1.readline()
+                print("from client:", back)
+                
+                if back.decode("utf-8") == "Done\n":
+                    transaction += 1
+                    completed = True                    
+                
+                
+                
+                
+                
     uart1.write("\n")
     
     response.close()
