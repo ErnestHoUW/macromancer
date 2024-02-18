@@ -3,15 +3,16 @@ import time
 import board
 import digitalio
 import usb_hid
+import json
 from adafruit_hid.keyboard import Keyboard
 from adafruit_hid.keycode import Keycode
 import busio
+import storage
 
 def send_keycodes(list):
     for keycode in list:
         kbd.send(keycode)
         
-
 
 kbd = Keyboard(usb_hid.devices)
 # shutdown = [Keycode.GUI, Keycode.]
@@ -22,6 +23,7 @@ led = digitalio.DigitalInOut(board.LED)
 # led = digitalio.DigitalInOut(board.SCK)
 led.direction = digitalio.Direction.OUTPUT
 
+
 uart = busio.UART(board.GP0, board.GP1, baudrate=115200)
 
 while True:
@@ -31,26 +33,13 @@ while True:
     print(command)
     if command != None:
         command = command[:-1].decode("utf-8")
-        print(command)
-        if command == "shutdownComputer":
-            kbd.press(Keycode.WINDOWS, Keycode.X)
-            time.sleep(0.5)
-            kbd.release(Keycode.WINDOWS, Keycode.X)
-            time.sleep(0.5)
-            kbd.send(Keycode.U)
-            time.sleep(0.5)
-            kbd.release(Keycode.U)
-            time.sleep(0.5)
-            kbd.send(Keycode.U)
-            time.sleep(0.5)
-            kbd.release(Keycode.U)
         
-            # Push Keycode(The letter that you want to use Make sure that they are always Capital letters)
-    # kbd.send(Keycode.C, Keycode.O, Keycode.O, Keycode.L,)
-    """
-    if command is not None:
-
+        splitCommands = command.split("|")
+        
+        for splitC in splitCommands:
+            simulPressed = splitC.split("+")
             
-    """        
-    
+            kbd.press(*simulPressed)
+            time.sleep(0.5)
+            kbd.release(*simulPressed)
     

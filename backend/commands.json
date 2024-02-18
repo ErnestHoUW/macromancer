@@ -1,0 +1,6 @@
+{
+  "shutdownComputer": {
+    "description": "This command shutdowns the computer",
+    "keystrokes": "227+27|24|24"
+  }
+}

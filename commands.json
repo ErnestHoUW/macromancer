@@ -1,0 +1,4 @@
+{
+  "command": "shutdownComputer",
+  "keystrokes": "windows+x|u|u"
+}
