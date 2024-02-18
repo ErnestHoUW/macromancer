@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "http://localhost:3000"
+const URL = import.meta.env.BASE_URL;
 
 export const getCommands = async () => {
   const { data } = await axios.get(
