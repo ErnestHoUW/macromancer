@@ -1,18 +1,22 @@
 import axios from "axios";
 
-const URL = import.meta.env.BASE_URL;
+const URL = import.meta.env.VITE_PORKBUN_URL;
+
+const apiClient = axios.create({
+  baseURL: URL,
+})
 
 export const getCommands = async () => {
-  const { data } = await axios.get(
-    `${URL}/command/all`,
+  const { data } = await apiClient.get(
+    `/command/all`,
   );
 
   return Object.entries(data);
 };
 
 export const createCommand = async (newData) => {
-  const { data } = await axios.post(
-    `${URL}/command/create`,
+  const { data } = await apiClient.post(
+    `/command/create`,
     newData,
   );
 
@@ -20,7 +24,7 @@ export const createCommand = async (newData) => {
 };
 
 export const deleteCommand = async (command) => {
-  await axios.delete(
-    `${URL}/command?commandName=${command}`,
+  await apiClient.delete(
+    `/command?commandName=${command}`,
   );
 }
