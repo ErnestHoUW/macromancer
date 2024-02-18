@@ -79,9 +79,9 @@ while True:
             
                 complete = True
                 transaction += 1
-                            
+            
+            print("Client send: Done")
             uart.write(b"Done\n")
-                
   
             
         except (ValueError, IndexError) as error:
