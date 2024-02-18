@@ -1,64 +1,41 @@
-import { Button, Form, Input } from "antd";
+import { useState } from "react";
+import MenuList from "../components/MenuList/MenuList";
+import CommandList from "../components/CommandList/CommandList";
+import CommandForm from "../components/CommandForm/CommandForm";
+import styled from "styled-components";
+import logo from "./assets/logo.png";
 
 const App = () => {
-  const [form] = Form.useForm();
+  const [currentTab, setCurrentTab] = useState("allCommands");
 
-  const onFinish = (values) => {
-    console.log(values)
-
-    form.resetFields();
-  }
+  const handleTabChange = (key) => {
+    setCurrentTab(key);
+  };
 
   return (
-    <>
-      <Form
-        onFinish={onFinish}
-        form={form}
-      >
-        <Form.Item
-          label="Command Name"
-          name="commandName"
-          required
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Description"
-          name="description"
-          required
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Keystrokes"
-          name="keystrokes"
-          required
-        >
-          <Input  />
-          <div>Rules for inputting keystrokes:</div>
-          <ul>
-            <li>
-              For keys pressed simultaneously please connect them using "+".
-            </li>
-            <li>
-              Please use "ctrl" for the Control Key.
-            </li>
-            <li>
-              If you have a sequence of keys, seperate them using |.
-            </li>
-            <li>
-              Ex. ctrl+k+d | ctrl+s | s (everything before the | will be executed first, then the second, and so on and so forth.)
-            </li>
-          </ul>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
-    </>
+    <Wrapper>
+      <img src={logo} width={128} height={128} />
+      <h1>Macromancer</h1>
+      <MenuList tab={currentTab} setTab={handleTabChange} />
+      {currentTab === "allCommands" && <CommandList />}
+      {currentTab === "addCommand" && <CommandForm />}
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: calc(95vw - 40px);
+  height: 100vh;
+
+  h1 {
+    margin-bottom: 24px;
+  }
+
+  img {
+    margin-bottom: 24px;
+  }
+`
 
 export default App;

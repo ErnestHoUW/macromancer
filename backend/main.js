@@ -1,6 +1,7 @@
 // Import required modules
 import express from "express";
-import { convertKeystrokes, readFile, updateFile } from "./utils.js";
+import { convertKeystrokes, deleteFromFile, readFile, updateFile } from "./utils.js";
+import cors from 'cors'
 
 // Create an Express application
 const app = express();
@@ -8,6 +9,7 @@ const port = 3000; // Port number for the server to listen on
 
 // Define middleware to parse JSON bodies
 app.use(express.json());
+app.use(cors())
 
 const waitingCommands = [];
 
@@ -23,6 +25,13 @@ app.get("/command", (req, res) => {
   );
 });
 
+app.get("/command/all", (req, res) => {
+  const commands = readFile("./commands.json");
+
+  res.header("Access-Control-Allow-Origin", "*");
+  res.send(commands)
+})
+
 app.post("/command", (req, res) => {
   const { command } = req.body;
 
@@ -31,7 +40,7 @@ app.post("/command", (req, res) => {
   const mappedCommand = commands[command];
 
   if (mappedCommand) {
-    waitingCommands.push(mappedCommand.keystrokes);
+    waitingCommands.push(convertKeystrokes(mappedCommand.keystrokes));
   }
 
   res.send("");
@@ -40,15 +49,23 @@ app.post("/command", (req, res) => {
 app.post("/command/create", (req, res) => {
   const { command, description, keystrokes } = req.body;
 
-  const convertedKeystrokes = convertKeystrokes(keystrokes);
-
   updateFile("./commands.json", command, {
     description,
-    keystrokes: convertedKeystrokes,
-  });
+    keystrokes,
+  })
 
-  res.send("Successfully updated commands");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.send({ "success": true });
 });
+
+app.delete("/command", (req, res) => {
+  const command = req.query.commandName;
+
+  deleteFromFile("./commands.json", command)
+
+  res.header("Access-Control-Allow-Origin", "*");
+  res.send({ "success": true });
+})
 
 // Start the server and listen on the specified port
 app.listen(port, () => {
