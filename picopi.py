@@ -43,7 +43,8 @@ while True:
         
         try:
             if command is None:
-                raise ValueError
+                continue
+                #raise ValueError
             
             command = command.decode("utf-8")
             
@@ -95,8 +96,8 @@ while True:
     if splitCommands != None:
         for splitC in splitCommands:
             simulPressed = [int(x) for x in splitC.split("+")]
-            
+            time.sleep(0.1)
             kbd.press(*simulPressed)
-            time.sleep(0.5)
+            time.sleep(0.1)
             kbd.release(*simulPressed)
     

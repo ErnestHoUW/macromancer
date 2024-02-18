@@ -13,7 +13,7 @@ wlan.connect('Tetris', 'abcd1234') # connect to an AP
 wlan.config('mac')      # get the interface's MAC address
 wlan.ifconfig()         # get the interface's IP/netmask/gw/DNS addresses
 
-url = "http://e123-138-51-93-72.ngrok-free.app/command"
+url = "http://secure-whippet-tightly.ngrok-free.app/command"
 transaction = 0
 while True:
     print("checking for command")
@@ -51,7 +51,7 @@ while True:
                 back = uart1.readline()
                 print("from client:", back)
                 
-                if back.decode("utf-8") == "Done\n":
+                if back is not None and back.decode("utf-8") == "Done" +"\n":
                     transaction += 1
                     completed = True                    
                 
