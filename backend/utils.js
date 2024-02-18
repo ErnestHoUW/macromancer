@@ -46,11 +46,11 @@ export const convertKeystrokes = (keystrokes) => {
         keys.push(keycodes[key.toLowerCase()])
       })
 
-      formattedString.push(keys.join("+"))
+      formattedString.push(keys)
     } else {
       formattedString.push(keycodes[str.toLowerCase()])
     }
   })
 
-  return formattedString.join("|")
+  return formattedString
 }

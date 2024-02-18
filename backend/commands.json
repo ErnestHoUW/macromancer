@@ -1,6 +1,14 @@
 {
   "shutdownComputer": {
     "description": "This command shutdowns the computer",
-    "keystrokes": "227+27|24|24"
+    "keystrokes": "windows+x|u|u"
+  },
+  "test": {
+    "description": "test",
+    "keystrokes": "ctrl+a+s+d|2|4"
+  },
+  "ctrl alt delete": {
+    "description": "ctrl alt delete",
+    "keystrokes": "ctrl+alt+delete"
   }
 }

@@ -1,10 +1,31 @@
 import { Button, Form, Input } from "antd";
+import { createCommand, getCommands } from "../api";
+import { useEffect, useState } from "react";
 
 const App = () => {
   const [form] = Form.useForm();
+  const [commands, setCommands] = useState([])
+  const [success, setSuccess] = useState(false)
 
-  const onFinish = (values) => {
+  const fetchCommands = async () => {
+    const res = await getCommands();
+    setCommands(res)
+  }
+ 
+  useEffect(() => {
+    fetchCommands();
+  }, [])
+
+  const onFinish = async (values) => {
     console.log(values)
+    const success = await createCommand({
+      command: values.commandName,
+      description: values.description,
+      keystrokes: values.keystrokes,
+    })
+
+    setSuccess(success)
+    fetchCommands();
 
     form.resetFields();
   }
@@ -35,7 +56,15 @@ const App = () => {
           required
         >
           <Input  />
-          <div>Rules for inputting keystrokes:</div>
+          
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+      <div>Rules for inputting keystrokes:</div>
           <ul>
             <li>
               For keys pressed simultaneously please connect them using "+".
@@ -50,13 +79,16 @@ const App = () => {
               Ex. ctrl+k+d | ctrl+s | s (everything before the | will be executed first, then the second, and so on and so forth.)
             </li>
           </ul>
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item>
-      </Form>
+      {success && <div>Successfully added command!</div>}
+      <div>
+        {commands.map(([key, value]) => 
+        <ul key={key}>
+          <li style={{ fontWeight: 600 }}>{key}</li>
+          <li>{value.description}</li>
+          <li>{value.keystrokes}</li>
+        
+        </ul>)}
+      </div>
     </>
   );
 };
